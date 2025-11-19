@@ -1,2 +1,1 @@
-*.pdf
-rmarkdown2pdf.sublime-workspace
+.cache/**

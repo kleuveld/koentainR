@@ -7,8 +7,9 @@ This repo contains a docker file to build my rmarkdown2pdf image, that builds a 
 Make sure docker is installed, and run: 
 
 ```
-docker build -t rmarkdown2pdf .
+docker build -t koentainr .
 ```
+
 
 Then, to compile the example PDF:
 
@@ -22,7 +23,7 @@ to render the file:
 
 ```
 
-docker run --rm -v C:\Users\leuve002\git\r_cheatsheet:/doc rmarkdown2pdf index.Rmd
+docker run --rm -v C:\Users\leuve002\git\r_cheatsheet:/doc koentainr index.Rmd
 
 
 ```
@@ -32,27 +33,23 @@ docker run --rm -v C:\Users\leuve002\git\r_cheatsheet:/doc rmarkdown2pdf index.R
 Or, to run interactively:
 
 ```
-docker run -it -v %cd%:/doc koenleuveld/rmarkdown2pdf 
+docker build -t koentainr .
+
+
+docker run -it -v %cd%:/doc koenleuveld/koentainr 
+
+docker run --rm -it -v %cd%:/doc koentainr /bin/bash
+
+docker run --rm -it koentainr /bin/bash
+
+docker run --rm -it -v c:\users\leuve002\git\r_cheatsheet:/doc koentainr 
+
+docker run --rm -it -v c:\users\leuve002\git\r_cheatsheet:/doc koentainr  /bin/bash
 
 ```
 
-The problem now is that you won't have a graphics device. You will have to save plots to files to view them.
-
-To fix this, on windows, install [Xming](http://www.straightrunning.com/XmingNotes/), and launch the program. Then run:
-
 ```
-docker run -i -t --rm -e DISPLAY=host.docker.internal:0 -v %cd%:/doc koenleuveld/rmarkdown2pdf:latest
-
-```
-
-Note that this isn't really great, the data viewer is barely useable, 
-for example.
-
-If you want to trouble shoot issues, 
-you may want to launch the container in bash, rather than R:
-
-```
-docker run -it --entrypoint /bin/bash -v %cd%:/doc rmarkdown2pdf 
+docker run -it --entrypoint /bin/bash -v %cd%:/doc koentainr 
 
 ```
 
@@ -63,12 +60,12 @@ docker run -it --entrypoint /bin/bash -v %cd%:/doc rmarkdown2pdf
 To push it to docker hub, follow [instructions](https://docs.docker.com/get-started/04_sharing_app/):
 
 ```
-docker tag rmarkdown2pdf koenleuveld/rmarkdown2pdf:0.2.11
-docker tag rmarkdown2pdf koenleuveld/rmarkdown2pdf:latest
+docker tag koentainr koenleuveld/koentainr:0.2.11
+docker tag koentainr koenleuveld/koentainr:latest
 
-docker push koenleuveld/rmarkdown2pdf:latest
-docker tag rmarkdown2pdf koenleuveld/rmarkdown2pdf:0.2.11
-
+docker push koenleuveld/koentainr:latest
+docker tag koentainr koenleuveld/koentainr:0.2.11
+r
 
 ```
 
@@ -77,34 +74,10 @@ docker tag rmarkdown2pdf koenleuveld/rmarkdown2pdf:0.2.11
 
 ```
           - name: Run the build process with Docker
-            run: docker run --rm -v ${{ github.workspace }}:/doc docker.io/koenleuveld/rmarkdown2pdf:0.2.1 myrmd.Rmd
+            run: docker run --rm -v ${{ github.workspace }}:/doc docker.io/koenleuveld/koentainr:0.2.1 myrmd.Rmd
 
 ```
 
-# Using it in Sublime Text
-
-
-To include it in sublime text, place the following in `AppData\Roaming\Sublime Text\Packages\User\Build Systems\rmarkdown_render_with_docker.sublime-build`:
-
-```
-
-{
-  "cmd": ["docker","run", "--rm", "-v", "$file_path:/doc", "koenleuveld/rmarkdown2pdf:latest", "$file_name"],
-  "selector": "text.html.markdown.rmarkdown",
-  "path" : "C:/Program Files/Docker/Docker/resources/bin/",
-  "variants": 
-    [
-      {
-        "name": "0.2.3",
-        "cmd": ["docker","run", "--rm", "-v", "$file_path:/doc", "koenleuveld/rmarkdown2pdf:0.2.3", "$file_name"]
-      }
-    ]
-}
-
-```
-
-
-# renv
 
 The container comes with renv.
 

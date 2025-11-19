@@ -1,1 +1,0 @@
-install.packages('flextable',repos = 'http://cran.us.r-project.org')
