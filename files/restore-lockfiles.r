@@ -1,7 +1,7 @@
 #Create restore_all.R script
 lockfile_dirs <- list.dirs("/tmp/lockfiles", recursive = FALSE)
 
-options(renv.config.ignored.packages = c("pggthemewur"))
+options(renv.config.ignored.packages = c("ggthemewur"))
 
 
 #options(pkgType = "binary")

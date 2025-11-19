@@ -1,20 +1,24 @@
 # About
 
-This repo contains a docker file to build my rmarkdown2pdf image, that builds a pdf from RMarkdown.
+This repo contains a docker file to build my koentainR image, 
+which builds RMarkdown documents.
 
-# Running the docker locally
+It used to be called rmarkdown2pdf because it could render pdfs, 
+but now it doesn't.
+
+# Running the container locally
 
 Make sure docker is installed, and run: 
 
 ```
 docker build -t koentainr .
-```
 
+```
 
 Then, to compile the example PDF:
 
 ```
-docker run --rm -v c:\Users\leuve002\git\rmarkdown2pdf:/doc rmarkdown2pdf myrmd.Rmd
+docker run --rm -v path/to/project:/doc koentainR myrmd.Rmd
 
 ```
 
@@ -23,7 +27,7 @@ to render the file:
 
 ```
 
-docker run --rm -v C:\Users\leuve002\git\r_cheatsheet:/doc koentainr index.Rmd
+docker run --rm -v /home/koen/git/r_cheatsheet:/doc koentainr index.Rmd
 
 
 ```
@@ -33,23 +37,8 @@ docker run --rm -v C:\Users\leuve002\git\r_cheatsheet:/doc koentainr index.Rmd
 Or, to run interactively:
 
 ```
-docker build -t koentainr .
-
-
-docker run -it -v %cd%:/doc koenleuveld/koentainr 
-
-docker run --rm -it -v %cd%:/doc koentainr /bin/bash
-
-docker run --rm -it koentainr /bin/bash
-
-docker run --rm -it -v c:\users\leuve002\git\r_cheatsheet:/doc koentainr 
-
-docker run --rm -it -v c:\users\leuve002\git\r_cheatsheet:/doc koentainr  /bin/bash
-
-```
-
-```
 docker run -it --entrypoint /bin/bash -v %cd%:/doc koentainr 
+
 
 ```
 
