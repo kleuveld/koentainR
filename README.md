@@ -46,8 +46,14 @@ docker run --rm -v /home/koen/git/r_cheatsheet:/doc koentainr index.Rmd
 Or, to run interactively:
 
 ```
-docker run -it --entrypoint /bin/bash -v %cd%:/doc koentainr 
+docker run -it --entrypoint /bin/bash koentainr 
 
+```
+
+To add git support, make sure a private key is in home and:
+
+```
+docker run -it --entrypoint /bin/bash -v /home/koen/.shh:/root/.shh  koentainr 
 
 ```
 
