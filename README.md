@@ -53,7 +53,7 @@ docker run -it --entrypoint /bin/bash koentainr
 To add git support, make sure a private key is in home and:
 
 ```
-docker run -it --entrypoint /bin/bash -v /home/koen/.shh:/root/.shh  koentainr 
+docker run -it --entrypoint /bin/bash -v /home/koen/.ssh:/root/.ssh  koentainr 
 
 ```
 
