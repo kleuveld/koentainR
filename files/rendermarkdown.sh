@@ -2,12 +2,15 @@
 
 cd /doc
 
-if [ -n "$PROJECT" ]; then
-  echo "Setting RENV_PATHS_LIBRARY for project: $PROJECT"
-  export RENV_PATHS_LIBRARY="/root/.cache/R/renv/$PROJECT"
-else
-  echo "PROJECT environment variable is not set. Using $RENV_PATHS_LIBRARY."
-fi
+# multiple projects arent currently supported.
+# if [ -n "$PROJECT" ]; then
+#   echo "Setting RENV_PATHS_LIBRARY for project: $PROJECT"
+#   CACHE_HOME="${HOME:-/tmp}"
+#   export RENV_PATHS_LIBRARY="$CACHE_HOME/.cache/R/renv/$PROJECT"
+#   mkdir -p "$RENV_PATHS_LIBRARY"
+# else
+#   echo "PROJECT environment variable is not set. Using $RENV_PATHS_LIBRARY."
+# fi
 
 if [ $# -eq 0 ]; then
   R

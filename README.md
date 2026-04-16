@@ -39,6 +39,9 @@ to render the file:
 docker run --rm -v /home/koen/git/r_cheatsheet:/doc koentainr index.Rmd
 
 
+docker run --rm -v /home/koen/git/r_cheatsheet:/doc ghcr.io/kleuveld/koentainr:0.3.r_cheatsheet index.Rmd
+
+
 ```
 
 
@@ -47,6 +50,11 @@ Or, to run interactively:
 
 ```
 docker run -it --entrypoint /bin/bash koentainr 
+
+docker run -it --rm -v /home/koen/git/r_cheatsheet:/doc --entrypoint /bin/bash koentainr
+
+
+docker run -it --rm -v /home/koen/git/r_cheatsheet:/doc --entrypoint /usr/local/bin/R koentainr
 
 ```
 
