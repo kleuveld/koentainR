@@ -51,10 +51,10 @@ Or, to run interactively:
 ```
 docker run -it --entrypoint /bin/bash koentainr 
 
-docker run -it --rm -v /home/koen/git/r_cheatsheet:/doc --entrypoint /bin/bash koentainr
+docker run -it --rm -v /home/koen/git/r-fieldguide:/doc --entrypoint /bin/bash koentainr
 
 
-docker run -it --rm -v /home/koen/git/r_cheatsheet:/doc --entrypoint /usr/local/bin/R koentainr
+docker run -it --rm -v /home/koen/git/r-fieldguide:/doc --entrypoint /usr/local/bin/R koentainr
 
 ```
 
