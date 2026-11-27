@@ -6,23 +6,25 @@ ARG APP_GID=1000
 
 # Install system dependencies and R packages as root
 RUN /rocker_scripts/setup_R.sh https://packagemanager.posit.co/cran/__linux__/jammy/2026-04-21/
+#RUN /rocker_scripts/setup_R.sh https://packagemanager.posit.co/all/__linux__/jammy/2026-04-21/
 RUN /rocker_scripts/install_pandoc.sh
 RUN /rocker_scripts/install_geospatial.sh
-RUN apt-get update && apt-get install -y git libtiff-dev && rm -rf /var/lib/apt/lists/* \
+RUN apt-get update && apt-get install -y git libtiff-dev curl libuv1-dev  && rm -rf /var/lib/apt/lists/* \
 
-# httpgd needs libtiff 5, but this only installs 6:
-# Workaround: symlink libtiff.so.6 to libtiff.so.5 
-  && if [ -e /usr/lib/x86_64-linux-gnu/libtiff.so.6 ] && [ ! -e /usr/lib/x86_64-linux-gnu/libtiff.so.5 ]; then \
-    ln -s /usr/lib/x86_64-linux-gnu/libtiff.so.6 /usr/lib/x86_64-linux-gnu/libtiff.so.5; \
-  fi \
-  # Workaround: symlink libtiffxx.so.6 to libtiffxx.so.5 if needed
-  && if [ -e /usr/lib/x86_64-linux-gnu/libtiffxx.so.6 ] && [ ! -e /usr/lib/x86_64-linux-gnu/libtiffxx.so.5 ]; then \
-    ln -s /usr/lib/x86_64-linux-gnu/libtiffxx.so.6 /usr/lib/x86_64-linux-gnu/libtiffxx.so.5; \
-  fi
+# some things so we can get a working environment that works with VSCode devcontainers:
+  # httpgd needs libtiff 5, but this only installs 6:
+  # Workaround: symlink libtiff.so.6 to libtiff.so.5 
+    && if [ -e /usr/lib/x86_64-linux-gnu/libtiff.so.6 ] && [ ! -e /usr/lib/x86_64-linux-gnu/libtiff.so.5 ]; then \
+      ln -s /usr/lib/x86_64-linux-gnu/libtiff.so.6 /usr/lib/x86_64-linux-gnu/libtiff.so.5; \
+    fi \
+    # Workaround: symlink libtiffxx.so.6 to libtiffxx.so.5 if needed
+    && if [ -e /usr/lib/x86_64-linux-gnu/libtiffxx.so.6 ] && [ ! -e /usr/lib/x86_64-linux-gnu/libtiffxx.so.5 ]; then \
+      ln -s /usr/lib/x86_64-linux-gnu/libtiffxx.so.6 /usr/lib/x86_64-linux-gnu/libtiffxx.so.5; \
+    fi
 
-# Ensure UID/GID have passwd/group entries so tools like git can resolve names
-RUN if ! getent group "${APP_GID}" >/dev/null; then groupadd --gid "${APP_GID}" koentainR; fi \
-  && if ! getent passwd "${APP_UID}" >/dev/null; then useradd --uid "${APP_UID}" --gid "${APP_GID}" --home-dir /home/koentainR --create-home --shell /bin/bash koentainR; fi
+  # Ensure UID/GID have passwd/group entries so tools like git can resolve names
+  RUN if ! getent group "${APP_GID}" >/dev/null; then groupadd --gid "${APP_GID}" koentainR; fi \
+    && if ! getent passwd "${APP_UID}" >/dev/null; then useradd --uid "${APP_UID}" --gid "${APP_GID}" --home-dir /home/koentainR --create-home --shell /bin/bash koentainR; fi
 
 # Create directories and set permissions
 # we set permissions as loose as possible as this thing runs one-off anyway
@@ -45,14 +47,16 @@ ENV RENV_PATHS_LIBRARY=/renv/library
 COPY renv.lock /doc/
 
 
-# Install R packages as app user
+# Install R packages as app user; renv and for some reason xfun are needed
 RUN install2.r remotes
-RUN Rscript -e "remotes::install_version('renv', version = '1.1.1')"
-
+RUN Rscript -e "remotes::install_version('renv', version = '1.2.2')"
+#RUN Rscript -e "install.packages(c('xfun', 'remotes'))"
 
 
 # Activate and initialize renv
+ENV RENV_PATHS_ROOT=/renv
 RUN Rscript -e "renv::init(bare = TRUE)" \
+    #&& Rscript -e "renv::restore(lockfile = '/doc/renv.lock', packages = 'xfun', confirm = FALSE)" \
     && Rscript -e "renv::activate()" \
     && Rscript -e "renv::restore(lockfile = '/doc/renv.lock', confirm = FALSE)"
 
